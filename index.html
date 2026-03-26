@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カムワーズ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" data-phase="upload">
+
+    <!-- ─── Upload Phase ─── -->
+    <div class="phase-upload">
+      <div class="upload-container">
+        <h1 class="logo">カムワーズ</h1>
+        <p class="tagline">食べ物をカムカム、知識がひろがる</p>
+
+        <div class="upload-buttons">
+          <label class="btn btn-primary">
+            📁 画像をアップロード
+            <input type="file" id="file-input" accept="image/*" hidden>
+          </label>
+          <label class="btn btn-secondary">
+            📷 カメラで撮影
+            <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
+          </label>
+        </div>
+
+        <div id="api-key-warning" class="api-warning hidden">
+          <p>⚠️ APIキーが未設定です。<code>.env</code> に <code>VITE_ANTHROPIC_API_KEY</code> を設定してください。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Game Phase ─── -->
+    <div class="phase-game">
+      <header class="game-header">
+        <div id="breadcrumbs" class="breadcrumbs"></div>
+        <button id="reset-btn" class="btn-reset">↩ リセット</button>
+      </header>
+
+      <main class="game-main">
+        <!-- Canvas & Progress -->
+        <div class="canvas-wrap">
+          <canvas id="main-canvas"></canvas>
+          <p id="click-hint" class="click-hint">タップしてわってみよう！</p>
+          <div id="progress-row" class="progress-row hidden">
+            <div class="progress-track">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <span id="progress-text" class="progress-text">0/10</span>
+          </div>
+        </div>
+
+        <!-- Word Cards -->
+        <div id="words-area" class="words-area"></div>
+      </main>
+    </div>
+
+    <!-- ─── Loading Overlay ─── -->
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p id="loading-text">考え中...</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
