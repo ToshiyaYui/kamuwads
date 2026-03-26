@@ -23,11 +23,18 @@
             📁 画像をアップロード
             <input type="file" id="file-input" accept="image/*" hidden>
           </label>
-          <label class="btn btn-secondary">
-            📷 カメラで撮影
-            <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
-          </label>
+          <button class="btn btn-secondary" id="camera-btn">📷 カメラで撮影</button>
         </div>
+
+        <!-- カメラプレビュー -->
+        <div id="camera-ui" class="camera-ui hidden">
+          <video id="camera-video" autoplay playsinline muted></video>
+          <div class="camera-actions">
+            <button id="capture-btn" class="btn btn-primary">📸 撮影する</button>
+            <button id="camera-close-btn" class="btn btn-secondary">✕ とじる</button>
+          </div>
+        </div>
+        <canvas id="camera-canvas" hidden></canvas>
 
         <div id="api-key-warning" class="api-warning hidden">
           <p>⚠️ APIキーが未設定です。<code>.env</code> に <code>VITE_ANTHROPIC_API_KEY</code> を設定してください。</p>

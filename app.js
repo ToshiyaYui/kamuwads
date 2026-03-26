@@ -30,7 +30,12 @@ const state = {
 
 const app            = document.getElementById("app");
 const fileInput      = document.getElementById("file-input");
-const cameraInput    = document.getElementById("camera-input");
+const cameraBtn      = document.getElementById("camera-btn");
+const cameraUi       = document.getElementById("camera-ui");
+const cameraVideo    = document.getElementById("camera-video");
+const cameraCanvas   = document.getElementById("camera-canvas");
+const captureBtn     = document.getElementById("capture-btn");
+const cameraCloseBtn = document.getElementById("camera-close-btn");
 const apiKeyWarning  = document.getElementById("api-key-warning");
 const resetBtn       = document.getElementById("reset-btn");
 const breadcrumbsEl  = document.getElementById("breadcrumbs");
@@ -353,10 +358,48 @@ fileInput.addEventListener("change", (e) => {
   e.target.value = "";
 });
 
-cameraInput.addEventListener("change", (e) => {
-  handleFileSelected(e.target.files[0]);
-  e.target.value = "";
+// ── カメラ（getUserMedia）──
+
+let cameraStream = null;
+
+function stopCamera() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(t => t.stop());
+    cameraStream = null;
+  }
+  cameraUi.classList.add("hidden");
+}
+
+cameraBtn.addEventListener("click", async () => {
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    cameraVideo.srcObject = cameraStream;
+    cameraUi.classList.remove("hidden");
+  } catch {
+    // getUserMedia 失敗時はファイル選択にフォールバック
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.capture = "environment";
+    input.onchange = (e) => handleFileSelected(e.target.files[0]);
+    input.click();
+  }
 });
+
+captureBtn.addEventListener("click", () => {
+  cameraCanvas.width  = cameraVideo.videoWidth;
+  cameraCanvas.height = cameraVideo.videoHeight;
+  cameraCanvas.getContext("2d").drawImage(cameraVideo, 0, 0);
+
+  cameraCanvas.toBlob((blob) => {
+    stopCamera();
+    handleFileSelected(blob);
+  }, "image/jpeg", 0.85);
+});
+
+cameraCloseBtn.addEventListener("click", stopCamera);
 
 canvas.addEventListener("pointerdown", (e) => {
   e.preventDefault();
