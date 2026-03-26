@@ -15,6 +15,11 @@ const API_KEY = process.env.ANTHROPIC_API_KEY;
 
 app.use(express.json({ limit: "20mb" }));
 
+// ── ヘルスチェック（デバッグ用）──
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, hasApiKey: !!API_KEY });
+});
+
 // ── Anthropic API プロキシ ──
 app.post("/api/messages", async (req, res) => {
   if (!API_KEY) {
