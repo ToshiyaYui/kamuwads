@@ -166,11 +166,37 @@ function enterReadyPhase() {
 
 function renderSilhouette() {
   const size = canvasLogicalSize();
-  clearCanvas(ctx, canvas.width / state.dpr * state.dpr, canvas.height / state.dpr * state.dpr);
-  // clearRect はロジカルサイズで OK（scale 済み）
   ctx.clearRect(0, 0, size, size);
   drawSilhouette(ctx, state.currentItem, size / 2, size / 2, size);
   drawCracks(ctx);
+  drawFoodLabel(ctx, state.currentItem.food_name, size / 2, size / 2, size);
+}
+
+function drawFoodLabel(ctx, text, cx, cy, size) {
+  // クリック進行度（0〜1）に応じてテキストを揺らす
+  const progress = state.clickCount > 0
+    ? (state.clickInCycle / state.clicksPerWord)
+    : 0;
+  const shake = progress > 0.5
+    ? (Math.random() - 0.5) * size * 0.015 * (progress - 0.5) * 2
+    : 0;
+
+  ctx.save();
+  ctx.font = `bold ${Math.round(size * 0.13)}px "Zen Maru Gothic", "Hiragino Sans", sans-serif`;
+  ctx.textAlign    = "center";
+  ctx.textBaseline = "middle";
+
+  // 影で読みやすくする
+  ctx.shadowColor  = "rgba(0,0,0,0.6)";
+  ctx.shadowBlur   = size * 0.04;
+  ctx.shadowOffsetX = shake;
+  ctx.shadowOffsetY = shake;
+
+  // クリックが進むほど少し透明に（割れる予感）
+  ctx.globalAlpha = Math.max(0.4, 1 - progress * 0.5);
+  ctx.fillStyle   = "rgba(255,255,255,0.95)";
+  ctx.fillText(text, cx + shake, cy + shake);
+  ctx.restore();
 }
 
 /**
