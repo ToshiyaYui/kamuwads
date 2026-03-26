@@ -160,6 +160,12 @@ body {
   color: var(--muted);
 }
 
+.prompt-desc {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  margin-top: -0.2rem;
+}
+
 .prompt-textarea {
   font-family: inherit;
   font-size: 0.82rem;

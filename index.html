@@ -41,11 +41,13 @@
           <button id="prompt-toggle" class="prompt-toggle">⚙️ Claudeへの指示を編集</button>
           <div id="prompt-panel" class="prompt-panel hidden">
             <div class="prompt-field">
-              <label class="prompt-label">📷 食べ物認識の指示</label>
+              <label class="prompt-label">📷 最初のワード（画像アップロード時・1回目）</label>
+              <p class="prompt-desc">食べ物を認識して最初のワード群を出すときの指示</p>
               <textarea id="food-instruction" class="prompt-textarea" rows="4" spellcheck="false"></textarea>
             </div>
             <div class="prompt-field">
-              <label class="prompt-label">💥 ワード分解の指示</label>
+              <label class="prompt-label">💥 掘り下げのワード（ワードをタップするたび）</label>
+              <p class="prompt-desc">ワードカードをタップして次の連想を広げるときの指示</p>
               <textarea id="decompose-instruction" class="prompt-textarea" rows="4" spellcheck="false"></textarea>
             </div>
             <button id="prompt-reset" class="prompt-reset-btn">↩ デフォルトに戻す</button>
