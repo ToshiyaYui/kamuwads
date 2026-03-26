@@ -114,6 +114,83 @@ body {
   border: 1px solid var(--border);
 }
 
+/* ── プロンプトエディタ ── */
+
+.prompt-editor {
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+.prompt-toggle {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.prompt-toggle:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+
+.prompt-panel {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prompt-panel.hidden { display: none; }
+
+.prompt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.prompt-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.prompt-textarea {
+  font-family: inherit;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.prompt-textarea:focus { border-color: var(--accent); }
+
+.prompt-reset-btn {
+  align-self: flex-end;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.prompt-reset-btn:hover { color: var(--text); }
+
 /* ── カメラプレビュー ── */
 
 .camera-ui {

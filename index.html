@@ -36,6 +36,22 @@
         </div>
         <canvas id="camera-canvas" hidden></canvas>
 
+        <!-- プロンプトエディタ -->
+        <div class="prompt-editor">
+          <button id="prompt-toggle" class="prompt-toggle">⚙️ Claudeへの指示を編集</button>
+          <div id="prompt-panel" class="prompt-panel hidden">
+            <div class="prompt-field">
+              <label class="prompt-label">📷 食べ物認識の指示</label>
+              <textarea id="food-instruction" class="prompt-textarea" rows="4" spellcheck="false"></textarea>
+            </div>
+            <div class="prompt-field">
+              <label class="prompt-label">💥 ワード分解の指示</label>
+              <textarea id="decompose-instruction" class="prompt-textarea" rows="4" spellcheck="false"></textarea>
+            </div>
+            <button id="prompt-reset" class="prompt-reset-btn">↩ デフォルトに戻す</button>
+          </div>
+        </div>
+
         <div id="api-key-warning" class="api-warning hidden">
           <p>⚠️ APIキーが未設定です。<code>.env</code> に <code>VITE_ANTHROPIC_API_KEY</code> を設定してください。</p>
         </div>

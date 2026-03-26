@@ -5,7 +5,7 @@
  * 将来 MediaPipe FaceMesh や ARKit から呼び出す際はここだけ変更すればよい。
  */
 
-import { recognizeFood, decomposeWord } from "./api.js";
+import { recognizeFood, decomposeWord, DEFAULT_FOOD_INSTRUCTION, DEFAULT_DECOMPOSE_INSTRUCTION } from "./api.js";
 import { drawSilhouette, clearCanvas }  from "./shapes.js";
 import { addCrack, drawCracks, startExplosion, resetFracture } from "./fracture.js";
 
@@ -22,6 +22,8 @@ const state = {
   clickInCycle:   0,          // 現在のワード出現サイクル内のクリック数
   history:        [],         // [{ food_name, words[] }, ...] パンくず用
   dpr:            1,          // devicePixelRatio キャッシュ
+  foodInstruction:      DEFAULT_FOOD_INSTRUCTION,
+  decomposeInstruction: DEFAULT_DECOMPOSE_INSTRUCTION,
 };
 
 // ──────────────────────────────────────────────
@@ -36,7 +38,12 @@ const cameraVideo    = document.getElementById("camera-video");
 const cameraCanvas   = document.getElementById("camera-canvas");
 const captureBtn     = document.getElementById("capture-btn");
 const cameraCloseBtn = document.getElementById("camera-close-btn");
-const apiKeyWarning  = document.getElementById("api-key-warning");
+const apiKeyWarning       = document.getElementById("api-key-warning");
+const promptToggle        = document.getElementById("prompt-toggle");
+const promptPanel         = document.getElementById("prompt-panel");
+const foodInstructionEl   = document.getElementById("food-instruction");
+const decomposeInstructionEl = document.getElementById("decompose-instruction");
+const promptResetBtn      = document.getElementById("prompt-reset");
 const resetBtn       = document.getElementById("reset-btn");
 const breadcrumbsEl  = document.getElementById("breadcrumbs");
 const canvas         = document.getElementById("main-canvas");
@@ -132,7 +139,7 @@ async function handleFileSelected(file) {
 
   try {
     const { base64, mediaType } = await resizeImageToBase64(file);
-    const item = await recognizeFood(base64, mediaType);
+    const item = await recognizeFood(base64, mediaType, state.foodInstruction);
 
     state.history     = [item];
     state.currentItem = item;
@@ -280,7 +287,7 @@ async function handleWordTap(word) {
   loadingText.textContent = `「${word.text}」を分解中...`;
 
   try {
-    const item = await decomposeWord(word.text);
+    const item = await decomposeWord(word.text, state.decomposeInstruction);
 
     state.currentItem   = item;
     state.history.push(item);
@@ -448,6 +455,33 @@ window.addEventListener("resize", () => {
 // 初期化
 // ──────────────────────────────────────────────
 
+
+// ── プロンプトエディタ ──
+
+foodInstructionEl.value      = state.foodInstruction;
+decomposeInstructionEl.value = state.decomposeInstruction;
+
+promptToggle.addEventListener("click", () => {
+  const open = promptPanel.classList.toggle("hidden");
+  promptToggle.textContent = open
+    ? "⚙️ Claudeへの指示を編集"
+    : "⚙️ Claudeへの指示を編集 ▲";
+});
+
+foodInstructionEl.addEventListener("input", () => {
+  state.foodInstruction = foodInstructionEl.value;
+});
+
+decomposeInstructionEl.addEventListener("input", () => {
+  state.decomposeInstruction = decomposeInstructionEl.value;
+});
+
+promptResetBtn.addEventListener("click", () => {
+  state.foodInstruction      = DEFAULT_FOOD_INSTRUCTION;
+  state.decomposeInstruction = DEFAULT_DECOMPOSE_INSTRUCTION;
+  foodInstructionEl.value      = DEFAULT_FOOD_INSTRUCTION;
+  decomposeInstructionEl.value = DEFAULT_DECOMPOSE_INSTRUCTION;
+});
 
 checkApiKey();
 setupCanvas();
